@@ -43,7 +43,7 @@ A full-stack CRM for tracking companies moving through a sales pipeline (Lead â†
 31. [Interview Talking Points](#interview-talking-points)
 32. [Glossary](#glossary)
 33. [License](#license)
-34. [Contributing](#contributing)
+34. [Contributing & Contributors](#contributing--contributors)
 
 ---
 
@@ -1009,8 +1009,14 @@ Two layers: the prompt itself heavily constrains the decision space with explici
 
 No license has currently been specified in this repository.
 
-## Contributing
+## Contributing & Contributors
 
+### ðŸ‘¥ Contributors
+FlowCRM AI was built collaboratively end-to-end by:
+- Parthiv Ghosh ([@gitsparthiv](https://github.com/gitsparthiv))
+- Shubhamita ([@Shubhamita2005](https://github.com/Shubhamita2005))
+
+### Contributing Guidelines
 This project is set up as a straightforward personal/portfolio repository. To contribute:
 
 1. Fork the repository
