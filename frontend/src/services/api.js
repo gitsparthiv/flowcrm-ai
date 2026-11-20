@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://ai-crm-83jh.onrender.com/api";
+export const API_BASE_URL = import.meta.env.VITE_API_URL || "https://ai-crm-83jh.onrender.com/api";
 
 // Generic fetch function with error handling
 async function fetchAPI(endpoint, options = {}) {

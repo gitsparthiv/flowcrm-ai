@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_BASE_URL } from "../../services/api";
 
 export default function NegotiationBookingForm({
   open,
@@ -34,9 +35,7 @@ export default function NegotiationBookingForm({
     try {
       setLoading(true);
 
-      const response = await fetch(
-        "https://ai-crm-83jh.onrender.com/api/negotiation-meetings",
-        {
+      const response = await fetch(`${API_BASE_URL}/negotiation-meetings`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

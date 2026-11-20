@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { activitiesAPI } from "../../services/api";
+import { activitiesAPI, API_BASE_URL } from "../../services/api";
 import DemoBookingForm from "../overlays/DemoBookingForm";
 import NegotiationBookingForm from "../overlays/NegotiationBookingForm";
 
@@ -47,9 +47,7 @@ export default function Followups({
     // ✅ Fetch demo bookings
     let demoData = [];
     try {
-      const demoRes = await fetch(
-        "https://ai-crm-83jh.onrender.com/api/demo-bookings"
-      );
+      const demoRes = await fetch(`${API_BASE_URL}/demo-bookings`);
       if (demoRes.ok) {
         demoData = await demoRes.json();
       } else {
@@ -64,9 +62,7 @@ export default function Followups({
     // ✅ Fetch negotiation meetings (with proper error handling)
     let negotiationData = [];
     try {
-      const negotiationRes = await fetch(
-        "https://ai-crm-83jh.onrender.com/api/negotiation-meetings"
-      );
+      const negotiationRes = await fetch(`${API_BASE_URL}/negotiation-meetings`);
       
       if (negotiationRes.ok) {
         const contentType = negotiationRes.headers.get("content-type");

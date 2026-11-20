@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_BASE_URL } from "../services/api";
 
 export default function Meetings({ 
   title = "📅 Customer Meetings",
@@ -28,9 +29,7 @@ export default function Meetings({
       // ✅ Fetch demo bookings
       let demoData = [];
       try {
-        const demoRes = await fetch(
-          "https://ai-crm-83jh.onrender.com/api/demo-bookings"
-        );
+        const demoRes = await fetch(`${API_BASE_URL}/demo-bookings`);
         if (demoRes.ok) {
           demoData = await demoRes.json();
           console.log("📅 Demo data:", demoData);
@@ -44,9 +43,7 @@ export default function Meetings({
       // ✅ Fetch negotiation meetings
       let negotiationData = [];
       try {
-        const negotiationRes = await fetch(
-          "https://ai-crm-83jh.onrender.com/api/negotiation-meetings"
-        );
+        const negotiationRes = await fetch(`${API_BASE_URL}/negotiation-meetings`);
         
         if (negotiationRes.ok) {
           const contentType = negotiationRes.headers.get("content-type");

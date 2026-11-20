@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_BASE_URL } from "../../services/api";
 
 export default function DemoBookingForm({
   open,
@@ -35,9 +36,7 @@ export default function DemoBookingForm({
     try {
       setLoading(true);
 
-      const response = await fetch(
-        "https://ai-crm-83jh.onrender.com/api/demo-bookings",
-        {
+      const response = await fetch(`${API_BASE_URL}/demo-bookings`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
