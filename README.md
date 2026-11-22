@@ -1,10 +1,30 @@
 # FlowCRM AI — AI-Assisted Sales CRM
 
-*(GitHub repository: `AI_CRM`)*
+<p align="center">
+  <img src="https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React 19" />
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express" />
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
+  <img src="https://img.shields.io/badge/Google_Gemini_AI-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Google Gemini" />
+  <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
+  <img src="https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white" alt="Render" />
+</p>
 
-A full-stack CRM for tracking companies moving through a sales pipeline (Lead → Trial → Demo Booked → Negotiation → Closed Won), managing follow-ups, and viewing per-customer activity history. An offline AI job (Google Gemini) analyzes each customer's trial usage, activity, and follow-up history and writes a "next best action" recommendation back into the database, which the dashboard then displays.
+<p align="center">
+  <b>Enterprise-grade, AI-powered B2B Sales CRM designed to eliminate lead qualification fatigue.</b><br/>
+  Features an offline Gemini LLM inference engine analyzing multi-source usage telemetry into prioritized next best actions.
+</p>
 
-> **Note on accuracy:** This README was written by inspecting the actual source code in `frontend/` and `backend/`, not by trusting feature descriptions in a prompt. Every feature below is labeled **Implemented**, **Partially implemented**, or **Not implemented / mock UI** based on what the code actually does. See [Known Limitations](#known-limitations) and [Discrepancies Found](#discrepancies-found) for a full honesty pass.
+<p align="center">
+  <a href="https://flowcrm-ai-mu.vercel.app/" target="_blank">
+    <img src="https://img.shields.io/badge/🚀_Live_Demo-Vercel_Frontend-blue?style=for-the-badge" alt="Live Demo" />
+  </a>
+  <a href="https://flowcrm-ai.onrender.com/" target="_blank">
+    <img src="https://img.shields.io/badge/⚡_Live_API-Render_Backend-green?style=for-the-badge" alt="Live API" />
+  </a>
+</p>
 
 ---
 
@@ -150,15 +170,12 @@ docs/
 
 ## Live Demo
 
-**Live demo: Coming soon**
+- **Frontend Application:** [https://flowcrm-ai-mu.vercel.app/](https://flowcrm-ai-mu.vercel.app/) *(Deployed on Vercel)*
+- **Backend REST API:** [https://flowcrm-ai.onrender.com/](https://flowcrm-ai.onrender.com/) *(Deployed on Render with Supabase PostgreSQL connection pooling)*
 
-No live demo link is published in this documentation. However, the frontend's API client (`frontend/src/services/api.js`) has a Render URL hardcoded as its backend base:
-
-```js
-const API_BASE_URL = "https://ai-crm-83jh.onrender.com/api";
-```
-
-This indicates the **backend has been deployed to Render** at some point during development. This documentation does not independently verify whether that deployment is currently live — treat it as evidence found in source, not a guaranteed working link. No frontend deployment configuration (e.g. `vercel.json`, `netlify.toml`) exists in the repository, so frontend hosting could not be verified from the repository.
+### Quick Test Credentials (No signup needed):
+- **Role: Sales Manager** $\rightarrow$ Click *"Manager"* to view global pipeline telemetry, live ARR revenue potential, and all enterprise accounts.
+- **Role: Sales Representative** $\rightarrow$ Click *"Sales Representative"* and enter Rep ID: `1` (or `2`, `3`) to view individual assigned accounts.
 
 ## Tech Stack
 

@@ -1,0 +1,4 @@
+# Internal instructions and secret local files
+.agent_instructions.md
+.agent.env
+.env
