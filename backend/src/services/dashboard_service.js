@@ -356,19 +356,18 @@ const getManagerDashboardStats = async () => {
         FROM followup_recommendations;
     `);
 
-    // All meetings today
-    const todayMeetingsResult = await pool.query(`
+    // Total Scheduled Meetings (Demo bookings + Scheduled negotiations)
+    const meetingsResult = await pool.query(`
         SELECT COUNT(*) AS meeting_count
         FROM (
             SELECT demo_date AS meeting_date
             FROM demo_bookings
-            WHERE demo_date = CURRENT_DATE
 
             UNION ALL
 
             SELECT negotiation_date AS meeting_date
             FROM negotiation_meetings
-            WHERE negotiation_date = CURRENT_DATE
+            WHERE status = 'scheduled'
         ) AS combined;
     `);
 
@@ -384,7 +383,7 @@ const getManagerDashboardStats = async () => {
         trialUsers,
         conversionRate: Number(conversionRate),
         revenuePotential: Math.round(revenueResult.rows[0].revenue),
-        meetings: Number(todayMeetingsResult.rows[0].meeting_count)
+        meetings: Number(meetingsResult.rows[0].meeting_count)
     };
 };
 

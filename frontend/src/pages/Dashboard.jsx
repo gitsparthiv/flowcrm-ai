@@ -44,7 +44,7 @@ export default function Dashboard({
         {
           title: "Meetings",
           number: data.meetings || 0,
-          growth: "Today",
+          growth: "Scheduled",
         },
       ];
 
