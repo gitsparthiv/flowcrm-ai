@@ -170,7 +170,7 @@ const getPipelineStages = async (salesRepId = null) => {
         {
             name: "Closed Won",
             deals: customers
-                .filter(c => c.current_stage === "Subscribed")
+                .filter(c => c.current_stage === "Subscribed" || c.current_stage === "Closed Won")
                 .map(c => ({
                     customer_id: c.customer_id,
                     company: c.company_name,
