@@ -1,16 +1,18 @@
 export default function Hero({ title, subtitle, userName }) {
-  // Optional: Get current time for dynamic greeting
+  // Get current time for dynamic greeting
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return "Good Morning";
-    if (hour < 16) return "Good Afternoon";
+    if (hour < 17) return "Good Afternoon";
     return "Good Evening";
   };
 
+  const displayName = userName || "Sales Manager";
+
   return (
     <div className="hero">
-      <h1>{title || `${getGreeting()}, ${userName || "User"} 👋`}</h1>
-      <p>Welcome back to FlowCRM AI. Monitor trial users, manage customer relationships, track conversions, and let AI help your sales team convert more free-trial customers into paying subscribers </p>
+      <h1>{title || `${getGreeting()}, ${displayName} 👋`}</h1>
+      <p>{subtitle || "Welcome back to FlowCRM AI. Monitor trial telemetry, manage pipeline velocity, and prioritize high-conversion customer opportunities."}</p>
     </div>
   );
 }

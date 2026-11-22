@@ -59,7 +59,7 @@ export default function Dashboard({
 
   return (
     <div className="page active">
-      <Hero />
+      <Hero userName="Sales Manager" />
 
       <div className="stats">
         {loading && (
