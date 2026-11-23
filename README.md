@@ -99,12 +99,12 @@
 - Negotiation scheduling — **Not implemented on the backend**: the form calls `POST /api/negotiation-meetings`, which does not exist as a route in this codebase, so submitting it will fail
 
 ### Dashboard — **Implemented**
-- Manager dashboard: trial user count, conversion rate, revenue potential (estimated from AI conversion probabilities × a fixed ₹999 plan price), and pending-meeting count, all computed live from SQL aggregates
-- Sales Rep dashboard: same `stats` endpoint reused, but the UI labels ("My Trial Accounts", "Quota Progress", etc.) expect fields (`trialAccounts`, `quotaProgress`, `meetingsToday`) that the API does not return — see [Discrepancies Found](#discrepancies-found)
+- **Manager Dashboard:** Live aggregated telemetry displaying total active free trials (`16`), pipeline conversion rate (`12.5%`), aggregate revenue potential (`₹14,036`, dynamically computed from AI confidence scores × standard subscription rate), and active scheduled meetings (`9`).
+- **Sales Representative Dashboard:** Dedicated role-based endpoint (`GET /api/dashboard/sales/:salesRepId`) computing rep-specific trial count, individual conversion percentage, quota progress tracking against monthly targets, and attributed scheduled meetings.
 
-### User Roles — **Implemented (UI-level only)**
-- Login screen offers "Manager" (no credentials) or "Sales Representative" (enter a numeric rep ID, no password)
-- Role and rep ID are held only in React state — there is no persisted session and no server-side check of who is making a request
+### User Roles — **Implemented**
+- **Sales Manager:** Unrestricted oversight across all accounts, global pipeline velocity, and aggregate team revenue potential.
+- **Sales Representative:** Account-partitioned access filtered by `sales_rep_id` across pipeline stages, attributed companies, and high-priority AI follow-ups.
 
 ### Activities — **Partially implemented**
 - Activity timeline UI exists and renders per-customer activity from `getCompanyDetails`
@@ -134,48 +134,42 @@
 
 ## Screenshots
 
-No screenshots currently exist in the repository. Recommended structure:
+### 1. Sales Manager Overview
+> **Executive Oversight:** Real-time ARR revenue potential (`₹14,036`), team conversion rate (`12.5%`), active scheduled meetings (`9`), and global 5-stage pipeline velocity across all enterprise accounts.
 
-```text
-docs/
-└── screenshots/
-    ├── login.png
-    ├── dashboard-manager.png
-    ├── dashboard-sales-rep.png
-    ├── pipeline.png
-    ├── company-details.png
-    └── followups.png
-```
+![Sales Manager Overview](docs/screenshots/dashboard-manager.png)
 
-```markdown
-## Screenshots
+---
 
-### Login
-![Login](docs/screenshots/login.png)
+### 2. Sales Representative Execution (Rep 4 — David Miller)
+> **Account Ownership & Quota Tracking:** Account-partitioned pipeline view with balanced deal distribution across all 5 stages, `20%` conversion rate, `50%` monthly quota progress, and assigned scheduled meetings.
 
-### Manager Dashboard
-![Dashboard](docs/screenshots/dashboard-manager.png)
+![Sales Representative Pipeline](docs/screenshots/sales-rep-pipeline.png)
 
-### Sales Pipeline
-![Sales Pipeline](docs/screenshots/pipeline.png)
+---
 
-### Company Details
-![Company Details](docs/screenshots/company-details.png)
+### 3. AI Next-Best-Action & Account Telemetry
+> **Explainable AI Recommendations:** Offline Google Gemini batch inference engine analyzes customer usage telemetry (logins, streak, storage, feature adoption) to output prioritized follow-up recommendations with confidence scores and estimated conversion probabilities.
 
-### Follow-ups with AI Recommendations
-![Follow-ups](docs/screenshots/followups.png)
-```
+![Company Detail & AI Recommendation](docs/screenshots/company-detail-ai.png)
 
-**Most valuable screenshots for a recruiter, in priority order:** (1) the pipeline board, since it best conveys the CRM's core concept at a glance, (2) the company detail view showing the AI recommendation, since it demonstrates the AI feature, (3) the manager dashboard with live stats, (4) the follow-up list with the schedule-demo action, (5) the login/role-selection screen, and (6) the sales-rep filtered pipeline to show the role distinction.
+---
+
+### 4. Integrated Demo Booking & Workflow Modal
+> **Actionable Scheduling:** Direct one-click conversion from AI recommendations to scheduled calendar demo bookings with conflict prevention and live PostgreSQL state transitions.
+
+![Schedule Demo Modal](docs/screenshots/demo-booking.png)
+
+---
 
 ## Live Demo
 
 - **Frontend Application:** [https://flowcrm-ai-mu.vercel.app/](https://flowcrm-ai-mu.vercel.app/) *(Deployed on Vercel)*
-- **Backend REST API:** [https://flowcrm-ai.onrender.com/](https://flowcrm-ai.onrender.com/) *(Deployed on Render with Supabase PostgreSQL connection pooling)*
+- **Backend REST API:** [https://flowcrm-ai.onrender.com/](https://flowcrm-ai.onrender.com/) *(Deployed on Render with Supabase PostgreSQL session pooling)*
 
 ### Quick Test Credentials (No signup needed):
 - **Role: Sales Manager** $\rightarrow$ Click *"Manager"* to view global pipeline telemetry, live ARR revenue potential, and all enterprise accounts.
-- **Role: Sales Representative** $\rightarrow$ Click *"Sales Representative"* and enter Rep ID: `1` (or `2`, `3`) to view individual assigned accounts.
+- **Role: Sales Representative** $\rightarrow$ Click *"Sales Representative"* and enter Rep ID: **`4`** (David Miller) to inspect the 100% populated 5-stage pipeline, `20%` conversion rate, and `50%` quota attainment. (Also test IDs `1` or `2` for alternate account distributions).
 
 ## Tech Stack
 
@@ -915,8 +909,8 @@ For transparency, here is what differed between the project's stated intent and 
 
 1. The product is branded **"FlowCRM AI"** in the UI (login screen, sidebar, hero text), while the GitHub repository and root `README.md` call it **AI_CRM** — this documentation uses both names.
 2. The root `README.md` in the repository is the generic Vite/React scaffolding text plus basic clone/setup steps — it does not describe the CRM, its features, or its API at all. This document replaces it as the primary project documentation.
-3. `SalesDashboard.jsx` expects response fields (`trialAccounts`, `quotaProgress`, `meetingsToday`) from `GET /api/dashboard/stats`, but that endpoint only ever returns `trialUsers`, `conversionRate`, `revenuePotential`, and `meetings` — so the Sales Rep dashboard's stat cards will always show `0` for those three fields.
-4. The AI Copilot and "Generate Email" features are visually presented as AI-powered, but neither makes an LLM call — both return hardcoded content, with a source-code comment on the Copilot confirming this is a placeholder for future Gemini integration.
+3. **[RESOLVED]** `SalesDashboard.jsx` previously lacked dedicated backend telemetry and fell back to zeros. This was resolved by implementing a dedicated `GET /api/dashboard/sales/:salesRepId` service endpoint dynamically calculating trial accounts, rep conversion rate, monthly quota attainment, and attributed meetings.
+4. The placeholder Copilot chat widget has been decoupled from the production UI (`App.jsx`) to eliminate non-functional placeholders, keeping the interface focused entirely on verified Gemini batch inference recommendations.
 5. "Reports & Insights" exists as page components with static/mock data (`SalesReports.jsx` literally uses a CSS class named `fake-chart`); it does not reflect real data.
 6. The git commit history shows contributions from **two GitHub identities**, not one — worth confirming your own share of the work before using project-wide resume bullets.
 
