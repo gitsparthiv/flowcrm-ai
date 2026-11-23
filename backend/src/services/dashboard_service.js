@@ -403,20 +403,20 @@ const getSalesDashboardStats = async (salesRepId) => {
         [salesRepId]
     );
 
-    const trialAccounts = parseInt(trialResult.rows[0].trial_count);
+    const trialAccounts = parseInt(trialResult.rows[0].trial_count) || 0;
 
-    // ✅ 2. Converted (Subscribed) Accounts for this rep
+    // ✅ 2. Converted (Closed Won / Subscribed) Accounts for this rep
     const convertedResult = await pool.query(
         `
         SELECT COUNT(*) AS converted_count
         FROM customers
         WHERE sales_rep_id = $1
-        AND current_stage = 'Subscribed';
+        AND current_stage IN ('Closed Won', 'Subscribed');
         `,
         [salesRepId]
     );
 
-    const convertedAccounts = parseInt(convertedResult.rows[0].converted_count);
+    const convertedAccounts = parseInt(convertedResult.rows[0].converted_count) || 0;
 
     // ✅ 3. Total Assigned Customers
     const totalResult = await pool.query(
@@ -428,7 +428,7 @@ const getSalesDashboardStats = async (salesRepId) => {
         [salesRepId]
     );
 
-    const totalCustomers = parseInt(totalResult.rows[0].total_count);
+    const totalCustomers = parseInt(totalResult.rows[0].total_count) || 0;
 
     // ✅ 4. Conversion Rate
     let conversionRate = 0;
@@ -438,33 +438,39 @@ const getSalesDashboardStats = async (salesRepId) => {
         );
     }
 
-    // ✅ 5. Today's Meetings (Demo + Negotiation)
-    const todayMeetingsResult = await pool.query(
+    // ✅ 5. Scheduled Meetings (Demo + Negotiation) for this rep
+    const meetingsResult = await pool.query(
         `
         SELECT COUNT(*) AS meeting_count
         FROM (
-            SELECT demo_date AS meeting_date
-            FROM demo_bookings
-            WHERE sales_rep_id = $1
-            AND demo_date = CURRENT_DATE
+            SELECT db.demo_id
+            FROM demo_bookings db
+            LEFT JOIN customers c ON db.customer_id = c.customer_id
+            WHERE (db.sales_rep_id = $1 OR c.sales_rep_id = $1)
+            AND (db.status IS NULL OR db.status ILIKE 'scheduled%')
 
             UNION ALL
 
-            SELECT negotiation_date AS meeting_date
-            FROM negotiation_meetings
-            WHERE sales_rep_id = $1
-            AND negotiation_date = CURRENT_DATE
+            SELECT nm.negotiation_id
+            FROM negotiation_meetings nm
+            LEFT JOIN customers c ON nm.customer_id = c.customer_id
+            WHERE (nm.sales_rep_id = $1 OR c.sales_rep_id = $1)
+            AND (nm.status IS NULL OR nm.status ILIKE 'scheduled%')
         ) AS combined;
         `,
         [salesRepId]
     );
 
     const meetingsToday = parseInt(
-        todayMeetingsResult.rows[0].meeting_count
-    );
+        meetingsResult.rows[0].meeting_count
+    ) || 0;
 
-    // ✅ 6. Quota Progress (placeholder)
-    const quotaProgress = 0;
+    // ✅ 6. Quota Progress (Monthly quota target: 2 closed deals)
+    const monthlyQuota = 2;
+    const quotaProgress = Math.min(
+        Math.round((convertedAccounts / monthlyQuota) * 100),
+        100
+    );
 
     console.log("✅ Stats for rep:", salesRepId, {
         trialAccounts,

@@ -47,7 +47,7 @@ export default function SalesDashboard({
         {
           title: "My Meetings",
           number: data.meetingsToday || 0,
-          growth: "Today",
+          growth: "Scheduled",
         },
       ];
 
