@@ -238,7 +238,7 @@ export default function App() {
         items={notifications.map((n) => n.reason || n.action)}
       />
 
-      <Copilot open={copilotOpen} setOpen={setCopilotOpen} />
+      {/* <Copilot open={copilotOpen} setOpen={setCopilotOpen} /> */}
 
       <CompanyModal
         open={companyModalOpen}
